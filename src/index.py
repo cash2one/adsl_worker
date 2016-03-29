@@ -25,7 +25,7 @@ if __name__ == '__main__':
     adsl = Adsl(adsl_config['host'], adsl_config['port'])
 
     while True:
-        lines = Adsl.getlines()
+        lines = adsl.getlines()
         threads = []
         for line in lines:
             if adsl.getstatusbyline(line) == 'used':
