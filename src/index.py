@@ -28,9 +28,9 @@ if __name__ == '__main__':
         lines = adsl.getlines()
         threads = []
         for line in lines:
-            if adsl.getstatusbyline(line) == 'used':
+            if adsl.getstatusbyline(line) == 'dailing':
                 ip_idc = adsl.getidcbyline(line)
-                t = MyThread(dail, (line,), name=line)
+                t = MyThread(dail, (ip_idc,), name=line)
                 threads.append(t)
         if len(threads) == 0:
             time.sleep(10)
