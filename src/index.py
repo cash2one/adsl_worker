@@ -22,7 +22,7 @@ def dail(ip_idc):
         return False
 
 
-if __name__ == '__main__':
+def main():
     adsl = Adsl(adsl_config['host'], adsl_config['port'])
 
     while True:
@@ -42,3 +42,7 @@ if __name__ == '__main__':
             for i in range(len(threads)):
                 threads[i].join()
                 print threads[i].getResult()
+
+
+if __name__ == '__main__':
+    main()
