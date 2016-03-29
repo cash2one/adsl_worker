@@ -32,11 +32,12 @@ if __name__ == '__main__':
                 ip_idc = adsl.getidcbyline(line)
                 t = MyThread(dail, (line,), name=line)
                 threads.append(t)
+        if len(threads) == 0:
+            time.sleep(10)
+        else:
+            for i in range(len(threads)):
+                threads[i].start()
 
-        for i in range(len(threads)):
-            threads[i].start()
-
-        for i in range(len(threads)):
-            threads[i].join()
-            print threads[i].getResult()
-
+            for i in range(len(threads)):
+                threads[i].join()
+                print threads[i].getResult()
