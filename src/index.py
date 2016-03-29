@@ -23,17 +23,20 @@ def dail(ip_idc):
 
 if __name__ == '__main__':
     adsl = Adsl(adsl_config['host'], adsl_config['port'])
-    threads = []
-    lines = Adsl.getlines()
-    for line in lines:
-        ip_idc = adsl.getidcbyline(line)
-        t = MyThread(dail, (line,), name=line)
-        threads.append(t)
 
-    for i in range(len(threads)):
-        threads[i].start()
+    while True:
+        lines = Adsl.getlines()
+        threads = []
+        for line in lines:
+            if adsl.getstatusbyline(line) == 'used':
+                ip_idc = adsl.getidcbyline(line)
+                t = MyThread(dail, (line,), name=line)
+                threads.append(t)
 
-    for i in range(len(threads)):
-        threads[i].join()
-        print threads[i].getResult()
+        for i in range(len(threads)):
+            threads[i].start()
+
+        for i in range(len(threads)):
+            threads[i].join()
+            print threads[i].getResult()
 
