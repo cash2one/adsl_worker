@@ -16,6 +16,7 @@ def dail(ip_idc):
         data = urllib.urlencode({'dail': True})
         ret = urllib.urlopen(url, data).read()
         tm = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+        print 'dailing ' + ip_idc
         return str(tm) + ' ' + ip_idc + " dailed!"
     except Exception:
         return False
