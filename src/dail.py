@@ -47,12 +47,13 @@ def main():
         if len(threads) == 0:
             time.sleep(1)
         else:
+            print len(threads)
             for t in threads:
                 t.start()
-                print 'start dail ' + line
+                print 'start dail !'
             for t in threads:
                 t.join()
-            print 'join!'
+                print 'join dail !'
 
             print 'end!'
 
