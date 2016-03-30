@@ -2,8 +2,7 @@
 
 import urllib
 from tools import Adsl
-import time
-import logging
+import time, os, logging
 from mythread import MyThread
 
 adsl_config = {
@@ -14,6 +13,9 @@ adsl_config = {
 LOG_PATH = '/ROOT/logs/worker'
 FILE_NAME = 'worker-' + time.strftime('%Y-%m-%d', time.localtime()) + '.log'
 LOG_FILE = LOG_PATH + '/' + FILE_NAME
+
+if not os.path.exists(LOG_PATH):
+    os.makedirs(LOG_PATH)
 
 
 def dail(ip_idc):
