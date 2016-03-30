@@ -4,6 +4,7 @@ import urllib
 from tools import Adsl
 import time, os, logging
 from mythread import MyThread
+import threading
 
 adsl_config = {
     'host': '127.0.0.1',
@@ -35,26 +36,33 @@ def main():
 
     while True:
         lines = adsl.getlines()
-        threads = []
+        ips = []
+
         for line in lines:
             if adsl.getstatusbyline(line) == 'dailing':
                 # print line
                 ip_idc = adsl.getidcbyline(line)
-                t = MyThread(dail, (ip_idc,), name=line)
-                threads.append(t)
+                # t = MyThread(dail, (ip_idc,), name=line)
+                # threads.append(t)
+                ips.append(ip_idc)
 
-        if len(threads) == 0:
+        if len(ips) == 0:
             time.sleep(1)
         else:
-            for i in range(len(threads)):
+            threads = []
+            for i in range(len(ips)):
+                t = threading.Thread(target=dail, args=(ips[i],))
+                threads.append(t)
+            print 'started!'
+
+            for i in range(len(ips)):
                 threads[i].start()
 
-            print 'started!'
-            for i in range(len(threads)):
+            for i in range(len(ips)):
                 print 'before join'
                 threads[i].join()
                 print 'end join'
-                print threads[i].getResult()
+                # print threads[i].getResult()
             print 'end!'
 
 
