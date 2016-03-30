@@ -51,7 +51,9 @@ def main():
 
             print 'started!'
             for i in range(len(threads)):
+                print 'before join'
                 threads[i].join()
+                print 'end join'
                 print threads[i].getResult()
             print 'end!'
 
