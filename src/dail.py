@@ -30,7 +30,7 @@ def dail(ip_idc):
         url = 'http://' + ip_idc + ':8000'
         data = urllib.urlencode({'dail': True})
         ret = urllib2.urlopen(url, data).read()
-        logger.info(ret)
+        logger.info("%s %s" % (url, ret))
     except Exception, error:
         logger.error("dail %s error: %s" % (url, str(error)))
 
