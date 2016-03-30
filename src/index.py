@@ -3,12 +3,18 @@
 import urllib
 from tools import Adsl
 import time
+import logging
 from mythread import MyThread
 
 adsl_config = {
     'host': '127.0.0.1',
     'port': 6379,
 }
+
+LOG_PATH = '/ROOT/logs/worker'
+FILE_NAME = 'worker-' + time.strftime('%Y-%m-%d', time.localtime()) + '.log'
+LOG_FILE = LOG_PATH + '/' + FILE_NAME
+
 
 def dail(ip_idc):
     try:
@@ -33,8 +39,8 @@ def main():
                 ip_idc = adsl.getidcbyline(line)
                 t = MyThread(dail, (ip_idc,), name=line)
                 threads.append(t)
-        if len(threads) == 0:
-            time.sleep(10)
+            if len(threads) == 0:
+                time.sleep(10)
         else:
             for i in range(len(threads)):
                 threads[i].start()
