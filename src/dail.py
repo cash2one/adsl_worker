@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import urllib
+import urllib, urllib2
 from tools import Adsl
 import time, os, logging
 from mythread import MyThread
+from threading import Thread
 
 
 adsl_config = {
@@ -14,22 +15,26 @@ adsl_config = {
 LOG_PATH = '/ROOT/logs/worker'
 FILE_NAME = 'worker-' + time.strftime('%Y-%m-%d', time.localtime()) + '.log'
 LOG_FILE = LOG_PATH + '/' + FILE_NAME
-wlog = logging.FileHandler(LOG_FILE)
-wlog.setLevel(logging.INFO)
 
 if not os.path.exists(LOG_PATH):
     os.makedirs(LOG_PATH)
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='[%(asctime)s] [%(filename)s:%(lineno)d] [%(levelname)s] %(message)s',
+                    filemode='a',
+                    filename=LOG_FILE)
+logger = logging.getLogger(__name__)
 
 
 def dail(ip_idc):
     try:
         url = 'http://' + ip_idc + ':8000'
         data = urllib.urlencode({'dail': True})
-        ret = urllib.urlopen(url, data).read()
-        tm = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
-        print str(tm) + ' ' + ip_idc + " dailed!"
-    except Exception:
-        pass
+        ret = urllib2.urlopen(url, data).read()
+        logger.info(ret)
+    except Exception, error:
+        logger.error("dail %s error: %s" % (url, str(error)))
+
 
 def main():
     adsl = Adsl(adsl_config['host'], adsl_config['port'])
@@ -41,21 +46,17 @@ def main():
         for line in lines:
             if adsl.getstatusbyline(line) == 'dailing':
                 ip_idc = adsl.getidcbyline(line)
-                dailthread = MyThread(dail, (ip_idc,), name=line)
-                dailthread.start()
-                threads.append(dailthread)
-                print 'start dail ' + line
+                t = Thread(target=dail, args=(ip_idc,), name=line)
+                t.start()
+                threads.append(t)
+                logger.info('start dail ' + line)
 
         if len(threads) == 0:
             time.sleep(1)
         else:
-            print len(threads)
-
-            for t in threads:
+            for t,line in threads:
                 t.join()
-            #     print 'join dail !'
-
-            print 'end!'
+                logger.info('end dail: ' + line)
 
 
 if __name__ == '__main__':
