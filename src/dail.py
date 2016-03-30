@@ -53,9 +53,9 @@ def main():
         if len(threads) == 0:
             time.sleep(1)
         else:
-            for t,line in threads:
+            for t in threads:
                 t.join()
-                logger.info('end dail: ' + line)
+                logger.info('end dail: ' + t.getName())
 
 
 if __name__ == '__main__':
