@@ -3,7 +3,6 @@
 import urllib, urllib2
 from tools import Adsl
 import time, os, logging
-from mythread import MyThread
 from threading import Thread
 
 
