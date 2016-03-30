@@ -41,19 +41,19 @@ def main():
         for line in lines:
             if adsl.getstatusbyline(line) == 'dailing':
                 ip_idc = adsl.getidcbyline(line)
-                t = MyThread(dail, (ip_idc,), name=line)
-                threads.append(t)
+                dailthread = MyThread(dail, (ip_idc,), name=line)
+                dailthread.start()
+                threads.append(dailthread)
+                print 'start dail ' + line
 
         if len(threads) == 0:
             time.sleep(1)
         else:
             print len(threads)
-            for t in threads:
-                t.start()
-                print 'start dail !'
+
             for t in threads:
                 t.join()
-                print 'join dail !'
+            #     print 'join dail !'
 
             print 'end!'
 
