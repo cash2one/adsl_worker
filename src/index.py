@@ -38,20 +38,22 @@ def main():
         threads = []
         for line in lines:
             if adsl.getstatusbyline(line) == 'dailing':
-                print line
+                # print line
                 ip_idc = adsl.getidcbyline(line)
                 t = MyThread(dail, (ip_idc,), name=line)
                 threads.append(t)
 
         if len(threads) == 0:
-            time.sleep(10)
+            time.sleep(1)
         else:
             for i in range(len(threads)):
                 threads[i].start()
 
+            print 'started!'
             for i in range(len(threads)):
                 threads[i].join()
                 print threads[i].getResult()
+            print 'end!'
 
 
 if __name__ == '__main__':
